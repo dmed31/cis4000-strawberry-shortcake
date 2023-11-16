@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import logo from './Logo.png'
-import { styleProps } from 'react-native-web/dist/cjs/modules/forwardedProps'
 
 export default class Login extends Component {
   render() {
     return (
       <form>
-        <div>
+        <div className="image-container">
           <img src={logo} width={150} height={150}></img>
         </div>
         <h3>Sign In</h3>
