@@ -4,6 +4,7 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Login from './components/Login'
 import Registration from './components/Registration'
+import Feedback from './components/Feedback'
 
 const App = () => {
   return (
@@ -26,6 +27,11 @@ const App = () => {
                     Sign up
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to={'/feedback'}>
+                    Leave feedback
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -36,6 +42,7 @@ const App = () => {
               <Route exact path="/" element={<Login />} />
               <Route path="/sign-in" element={<Login />} />
               <Route path="/registration" element={<Registration />} />
+              <Route path="/feedback" element={<Feedback />} />
             </Routes>
           </div>
         </div>
