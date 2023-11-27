@@ -12,50 +12,63 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => err && console.log(err));
 
-const user_check = async function(req, res) {
-  connection.query(`
-    SELECT email
-    FROM users
-    WHERE email == ${req.query.email}
-  `, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.json({status: 'failure'});
-    } else if (data.length === 0) {
-      res.json({status: 'success', exists: 'false'});
-    } else {
-      res.json({status: 'success', exists: 'true'});
-    }
-  });
-}
+// const get_user = async function(req, res) {
+//   connection.query(`
+//     SELECT *
+//     FROM users
+//     WHERE email == '${req.query.email}'
+//   `, (err, data) => {
+//     if (err) {
+//       console.log(err);
+//       res.json({status: 'failure'});
+//     } else if (data.length === 0) {
+//       res.json({status: 'success', exists: 'false'});
+//     } else {
+//       res.json({status: 'success', exists: 'true'});
+//     }
+//   });
+// }
 
 const signup = async function (req, res) {
   connection.query(`
-    INSERT INTO users (id, email, password, firstName, lastName)
-    VALUES (${uuidv4()}, ${req.query.email}, ${req.query.password}, ${req.query.firstName}, ${req.query.lastName})
+    SELECT email
+    FROM users
+    WHERE email = '${req.body.email}'
   `, (err, data) => {
     if (err) {
       console.log(err);
-      res.json({status: 'failure'});
+      res.json({status: 'failure', reason: 'error'});
+    } else if (data.length !== 0) {
+      res.json({status: 'failure', exists: 'duplicate'});
     } else {
-      res.json({status: 'success'});
-    }
-  });
+      connection.query(`
+        INSERT INTO users (id, email, password, firstName, lastName)
+        VALUES ('${uuidv4()}', '${req.body.email}', '${req.body.password}', '${req.body.firstName}', '${req.body.lastName}')
+      `, (err, data) => {
+        if (err) {
+          console.log(err);
+          res.json({status: 'failure', reason: 'error'});
+        } else {
+          res.json({status: 'success'});
+        }
+      });
+        }
+      });
 }
 
 const login = async function (req, res) {
   connection.query(`
     SELECT *
     FROM users
-    WHERE ${req.query.email} == email AND ${req.query.password} == password
+    WHERE email = '${req.body.email}' AND password = '${req.body.password}'
   `, (err, data) => {
     if (err) {
       console.log(err);
-      res.json({status: 'failure'});
+      res.json({status: 'failure', reason: 'error'});
     } else if (data.length === 0) {
-      res.json({status: 'success', found: 'false'});
+      res.json({status: 'failure', reason: 'notFound'});
     } else {
-      res.json({status: 'success', found: 'true', data});
+      res.json({status: 'success', data});
     }
   });
 }
@@ -89,10 +102,9 @@ const save_filtered_image = async function (req, res) {
 }
 
 const add_feedback = async function (req, res) {
-  const text = req.query.text ?? '';
   connection.query(`
     INSERT INTO feedback (id, userId, imageId, feedbackType, text)
-    VALUES (${uuidv4()}, ${req.query.userId}, ${req.query.imageId}, ${req.query.feedbackType}, ${text})
+    VALUES (${uuidv4()}, ${req.query.userId}, ${req.query.imageId}, ${req.query.feedbackType}, ${req.query.text ?? ''})
   `, (err, data) => {
     if (err) {
       console.log(err);
@@ -103,12 +115,29 @@ const add_feedback = async function (req, res) {
   });
 }
 
+const add_multi_feedback = async function (req, res) {
+  let sql = `INSERT INTO feedback (id, userId, imageId, feedbackType, text) `;
+  const feedbackString = req.query.feedbackList
+    .map((x) => `VALUES (${uuidv4()}, ${x.userId}, ${x.imageId}, ${x.feedbackType}, ${x.text ?? ''})`)
+    .join(',\n');
+  connection.query(
+    'INSERT INTO feedback (id, userId, imageId, feedbackType, text)\n' + feedbackString
+  , (err, data) => {
+    if (err) {
+      console.log(err);
+      res.json({status: 'failure'});
+    } else {
+      res.json({status: 'success'});
+    }
+  });
+}
 
 module.exports = {
-  user_check,
+  // get_user,
   signup,
   login,
   save_original_image,
   save_filtered_image,
-  add_feedback
+  add_feedback,
+  add_multi_feedback
 }

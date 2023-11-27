@@ -5,7 +5,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Login from './components/Login'
 import Registration from './components/Registration'
 import Feedback from './components/Feedback'
-function App() {
+
+const App = () => {
   return (
     <Router>
       <div className="App">
@@ -49,4 +50,5 @@ function App() {
     </Router>
   )
 }
+
 export default App
