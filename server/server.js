@@ -15,7 +15,7 @@ app.use(cors({
 // ROUTES
 // app.get('/getUser', jsonParser, routes.get_user);
 app.post('/signup', jsonParser, routes.signup);
-app.post('/login', routes.login);
+app.post('/login', jsonParser, routes.login);
 app.post('/saveOriginalImage', routes.save_original_image);
 app.post('/saveFilteredImage', routes.save_filtered_image);
 app.post('/addFeedback', routes.add_feedback);
