@@ -1,5 +1,6 @@
 import React, { Component, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie'
 import config from '../config.json'
 
 const Registration = () => {
@@ -25,9 +26,8 @@ const Registration = () => {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         if (data['status'] !== 'success') {
-          if (data['reason'] === 'dupliate') {
+          if (data['reason'] === 'duplicate') {
             alert('An account with that email already exists.');
           } else {
             alert('An error occurred. Please check that all fields are inputted correctly.');
@@ -38,6 +38,14 @@ const Registration = () => {
         }
       })
   }
+
+  useEffect(() => {
+    Cookies.remove('id');
+    Cookies.remove('firstName');
+    Cookies.remove('lastName');
+    Cookies.remove('email');
+  }, []);
+
   return (
     <form onSubmit={register}>
       <h3>Sign Up</h3>

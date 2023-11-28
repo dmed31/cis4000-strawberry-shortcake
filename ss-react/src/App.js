@@ -1,22 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Login from './components/Login'
 import Registration from './components/Registration'
+import Main from './components/Main'
+import Cookies from 'js-cookie'
 
 const App = () => {
+  const handleLogout = () => {
+    Cookies.remove('id');
+    Cookies.remove('firstName');
+    Cookies.remove('lastName');
+    Cookies.remove('email');
+  }
+
   return (
     <Router>
       <div className="App">
         <nav className="navbar navbar-expand-lg navbar-light fixed-top">
           <div className="container">
-            <Link className="navbar-brand" to={'/sign-in'}>
+            <Link className="navbar-brand" to={'/main'}>
               Strawberry Shortcake
             </Link>
             <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
               <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link className="nav-link" to={'/sign-in'}>
                     Login
                   </Link>
@@ -24,6 +33,11 @@ const App = () => {
                 <li className="nav-item">
                   <Link className="nav-link" to={'/registration'}>
                     Sign up
+                  </Link>
+                </li> */}
+                <li className="nav-item">
+                  <Link className="nav-link" to={'/sign-in'} onClick={handleLogout}>
+                    Log Out
                   </Link>
                 </li>
               </ul>
@@ -36,6 +50,7 @@ const App = () => {
               <Route exact path="/" element={<Login />} />
               <Route path="/sign-in" element={<Login />} />
               <Route path="/registration" element={<Registration />} />
+              <Route path="/main" element={<Main />} />
             </Routes>
           </div>
         </div>
