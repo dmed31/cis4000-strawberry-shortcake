@@ -1,9 +1,18 @@
-import React, { useState, Component } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, FloatingLabel, Form, Row, Button } from "react-bootstrap";
 import * as bd from "react-basic-design";
 import Navbar from "./Navbar";
+import Cookies from 'js-cookie'
+import { useNavigate } from "react-router-dom";
 
 const Feedback = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const id = Cookies.get('id');
+    if (!id) {
+      navigate('/sign-in');
+    }
+  })
   return (
     <div className="App">
       <Navbar loggedIn={true}/>
