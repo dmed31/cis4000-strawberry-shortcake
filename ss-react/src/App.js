@@ -6,6 +6,7 @@ import Login from './components/Login'
 import Registration from './components/Registration'
 import Main from './components/Main'
 import Cookies from 'js-cookie'
+import Feedback from './components/Feedback'
 
 const App = () => {
   const handleLogout = () => {
@@ -40,6 +41,11 @@ const App = () => {
                     Log Out
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to={'/feedback'}>
+                    Leave feedback
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -51,6 +57,7 @@ const App = () => {
               <Route path="/sign-in" element={<Login />} />
               <Route path="/registration" element={<Registration />} />
               <Route path="/main" element={<Main />} />
+              <Route path="/feedback" element={<Feedback />} />
             </Routes>
           </div>
         </div>
