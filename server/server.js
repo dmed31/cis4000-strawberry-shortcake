@@ -18,7 +18,7 @@ app.post('/signup', jsonParser, routes.signup);
 app.post('/login', jsonParser, routes.login);
 app.post('/saveOriginalImage', routes.save_original_image);
 app.post('/saveFilteredImage', routes.save_filtered_image);
-app.post('/addFeedback', routes.add_feedback);
+app.post('/addBasicFeedback', jsonParser, routes.add_basic_feedback);
 app.post('/addMultiFeedback', routes.add_multi_feedback);
 
 app.listen(config.server_port, () => {

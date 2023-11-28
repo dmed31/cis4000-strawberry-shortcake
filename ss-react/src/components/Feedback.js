@@ -3,10 +3,37 @@ import { Col, FloatingLabel, Form, Row, Button } from "react-bootstrap";
 import * as bd from "react-basic-design";
 import Navbar from "./Navbar";
 import Cookies from 'js-cookie'
+import config from '../config.json';
 import { useNavigate } from "react-router-dom";
 
 const Feedback = () => {
   const navigate = useNavigate();
+  const saveFeedback = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    let fetchBody = {};
+    fetchBody['feedbackType'] = formData.get('type');
+    fetchBody['feedbackOne'] = formData.get('question1');
+    fetchBody['feedbackTwo'] = formData.get('question2');
+    fetchBody['feedbackThree'] = formData.get('question3');
+    fetchBody['userId'] = Cookies.get('id');
+    fetch(`http://${config.server_host}:${config.server_port}/addBasicFeedback`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(fetchBody)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data['status'] !== 'success') {
+          alert('An error occurred. Please check that all fields are inputted correctly.');
+        } else {
+          alert('Successfully submitted feedback!');
+          navigate('/');
+        }
+      })
+  }
   useEffect(() => {
     const id = Cookies.get('id');
     if (!id) {
@@ -19,27 +46,30 @@ const Feedback = () => {
       <div className="auth-wrapper">
         <div className="auth-inner">
           <bd.Paper className="p-3 my-3 mx-auto" style={{ maxWidth: 600 }}>
-            <Form autoComplete="off" className="">
+            <Form autoComplete="off" className="" onSubmit={saveFeedback}>
               <div className="text-primary text-center mb-4">
                 <h3 className="mt-3"  style={{color:'black'}}>Feedback</h3>
               </div>
 
-              <FloatingLabel label="Email address" className="dense has-icon mb-3">
+              {/* <FloatingLabel label="Email address" className="dense has-icon mb-3">
                 <Form.Control
                   name="email"
                   type="email"
-                  placeholder="yourName@gmail.com"
+                  value={Cookies.get('email')}
+                  disabled
+                  readonly
                 />
-              </FloatingLabel>
+              </FloatingLabel> */}
 
-              <Row>
+              {/* <Row>
                 <Col md>
                   <FloatingLabel label="Full Name" className="dense mb-3">
                     <Form.Control
                       name="fullName"
                       type="text"
-                      placeholder="FullName"
-                      autoComplete="off"
+                      value={`${Cookies.get('firstName')} ${Cookies.get('lastName')}`}
+                      disabled
+                      readonly
                     />
                   </FloatingLabel>
                 </Col>
@@ -53,7 +83,15 @@ const Feedback = () => {
                     </Form.Select>
                   </FloatingLabel>
                 </Col>
-              </Row>
+              </Row> */}
+
+              <FloatingLabel label="Type" className="dense mb-3">
+                <Form.Select name="type" placeholder="Type">
+                  <option value="suggestion">Suggestion</option>
+                  <option value="bugReport">Bug Report</option>
+                  <option value="others">Others</option>
+                </Form.Select>
+              </FloatingLabel>
 
               <FloatingLabel label="Question 1" className="dense mb-3">
                 <Form.Control
@@ -85,7 +123,7 @@ const Feedback = () => {
               <Button
                 style={{ backgroundColor: '#D9D9D9', color: '#000000',  borderColor: '#D9D9D9', fontSize:'14px'}}
                 size="lg"
-                type="button"
+                type="submit"
                 className="rounded-pill"
               >
                 Submit
