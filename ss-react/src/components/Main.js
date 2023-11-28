@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const Main = () => {
   const firstName = Cookies.get('firstName');
@@ -13,7 +14,14 @@ const Main = () => {
     }
   })
   return (
-    <div>Welcome {firstName} {lastName}!</div>
+    <div className="App">
+      <Navbar loggedIn={true}/>
+      <div className="auth-wrapper">
+        <div className="auth-inner">
+          <div>Welcome {firstName} {lastName}!</div>
+        </div>
+      </div>
+    </div>
   )
 }
 
