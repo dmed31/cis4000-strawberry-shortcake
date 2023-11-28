@@ -73,6 +73,7 @@ const login = async function (req, res) {
   });
 }
 
+// NOT IN USE
 const save_original_image = async function (req, res) {
   connection.query(`
     INSERT INTO images (id, userId, url)
@@ -87,6 +88,7 @@ const save_original_image = async function (req, res) {
   });
 }
 
+// NOT IN USE
 const save_filtered_image = async function (req, res) {
   connection.query(`
     INSERT INTO images (id, userId, originalImageId, url)
@@ -101,10 +103,10 @@ const save_filtered_image = async function (req, res) {
   });
 }
 
-const add_feedback = async function (req, res) {
+const add_basic_feedback = async function (req, res) {
   connection.query(`
-    INSERT INTO feedback (id, userId, imageId, feedbackType, text)
-    VALUES (${uuidv4()}, ${req.query.userId}, ${req.query.imageId}, ${req.query.feedbackType}, ${req.query.text ?? ''})
+    INSERT INTO feedback (id, userId, feedbackType, feedbackOne, feedbackTwo, feedbackThree)
+    VALUES ('${uuidv4()}', '${req.body.userId}', '${req.body.feedbackType}', '${req.body.feedbackOne ?? ''}', '${req.body.feedbackTwo ?? ''}', '${req.body.feedbackThree ?? ''}')
   `, (err, data) => {
     if (err) {
       console.log(err);
@@ -115,6 +117,7 @@ const add_feedback = async function (req, res) {
   });
 }
 
+// NOT IN USE
 const add_multi_feedback = async function (req, res) {
   let sql = `INSERT INTO feedback (id, userId, imageId, feedbackType, text) `;
   const feedbackString = req.query.feedbackList
@@ -138,6 +141,6 @@ module.exports = {
   login,
   save_original_image,
   save_filtered_image,
-  add_feedback,
+  add_basic_feedback,
   add_multi_feedback
 }
