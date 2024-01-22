@@ -8,6 +8,7 @@ import Main from './components/Main'
 import Cookies from 'js-cookie'
 import Feedback from './components/Feedback'
 import Navbar from './components/Navbar'
+import Gallery from './components/Gallery'
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/sign-in" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/gallery" element={<Gallery />} />
       </Routes>
     </Router>
   )

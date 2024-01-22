@@ -30,6 +30,11 @@ const Navbar = ({ loggedIn }) => {
                 Leave feedback
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={'/gallery'}>
+                Gallery
+              </Link>
+            </li>
           </ul>}
         </div>
       </div>
