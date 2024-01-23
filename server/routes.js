@@ -39,7 +39,7 @@ const signup = async function (req, res) {
       console.log(err);
       res.json({status: 'failure', reason: 'error'});
     } else if (data.length !== 0) {
-      res.json({status: 'failure', exists: 'duplicate'});
+      res.json({status: 'failure', reason: 'duplicate'});
     } else {
       connection.query(`
         INSERT INTO users (id, email, password, firstName, lastName)
@@ -73,11 +73,10 @@ const login = async function (req, res) {
   });
 }
 
-// NOT IN USE
 const save_original_image = async function (req, res) {
   connection.query(`
     INSERT INTO images (id, userId, url)
-    VALUES (${uuidv4()}, ${req.query.userId}, ${req.query.url})
+    VALUES ('${uuidv4()}', '${req.body.userId}', '${req.body.url}')
   `, (err, data) => {
     if (err) {
       console.log(err);
@@ -86,6 +85,21 @@ const save_original_image = async function (req, res) {
       res.json({status: 'success'});
     }
   });
+}
+
+const get_all_user_images = async function (req, res) {
+  connection.query(`
+    SELECT url
+    FROM images
+    WHERE userId='${req.body.userId}'
+  `, (err, data) => {
+    if (err) {
+      console.log(err);
+      res.json({status: 'failure'});
+    } else {
+      res.json({status: 'success', data});
+    }
+  })
 }
 
 // NOT IN USE
@@ -140,6 +154,7 @@ module.exports = {
   signup,
   login,
   save_original_image,
+  get_all_user_images,
   save_filtered_image,
   add_basic_feedback,
   add_multi_feedback

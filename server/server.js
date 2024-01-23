@@ -14,11 +14,12 @@ app.use(cors({
 
 // ROUTES
 // app.get('/getUser', jsonParser, routes.get_user);
-app.post('/signup', jsonParser, routes.signup);
-app.post('/login', jsonParser, routes.login);
-app.post('/saveOriginalImage', routes.save_original_image);
+app.post('/signup', jsonParser, routes.signup); // Used
+app.post('/login', jsonParser, routes.login); // Used
+app.post('/saveOriginalImage', jsonParser, routes.save_original_image); // Used
+app.post('/getAllUserImages', jsonParser, routes.get_all_user_images); // Used
 app.post('/saveFilteredImage', routes.save_filtered_image);
-app.post('/addBasicFeedback', jsonParser, routes.add_basic_feedback);
+app.post('/addBasicFeedback', jsonParser, routes.add_basic_feedback); // Used
 app.post('/addMultiFeedback', routes.add_multi_feedback);
 
 app.listen(config.server_port, () => {
