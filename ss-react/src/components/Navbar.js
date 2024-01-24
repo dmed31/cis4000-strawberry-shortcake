@@ -35,6 +35,11 @@ const Navbar = ({ loggedIn }) => {
                 Gallery
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={'/camera'}>
+                Camera
+              </Link>
+            </li>
           </ul>}
         </div>
       </div>

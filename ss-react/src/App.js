@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import Feedback from './components/Feedback'
 import Navbar from './components/Navbar'
 import Gallery from './components/Gallery'
+import Camera from './components/Camera'
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/registration" element={<Registration />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/camera" element={<Camera />} />
       </Routes>
     </Router>
   )

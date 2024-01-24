@@ -33,9 +33,9 @@ const Main = () => {
   }
   useEffect(() => {
     const id = Cookies.get('id');
-    if (!id) {
-      navigate('/sign-in');
-    }
+    // if (!id) {
+    //   navigate('/sign-in');
+    // }
   })
   return (
     <div className="App">
