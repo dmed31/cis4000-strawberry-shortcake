@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { NavDropdown } from 'react-bootstrap'
 
 const Navbar = ({ loggedIn }) => {
   return (
@@ -8,6 +9,9 @@ const Navbar = ({ loggedIn }) => {
         <Link className="navbar-brand" to={'/'}>
           Strawberry Shortcake
         </Link>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
         <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
           {loggedIn && <ul className="navbar-nav ml-auto">
             {/* <li className="nav-item">
@@ -35,11 +39,18 @@ const Navbar = ({ loggedIn }) => {
                 Gallery
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to={'/camera'}>
-                Camera
-              </Link>
-            </li>
+            <NavDropdown title="Upload Image" id="basic-nav-dropdown">
+              <NavDropdown.Item>
+                <Link className="dropdown-item" to={'/camera'}>
+                  Camera
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link className="dropdown-item" to={'/externalImageLink'}>
+                  External Link
+                </Link>
+              </NavDropdown.Item>
+            </NavDropdown>
           </ul>}
         </div>
       </div>
