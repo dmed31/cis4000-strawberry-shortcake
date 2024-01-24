@@ -15,7 +15,7 @@ const Main = () => {
     let fetchBody = {};
     fetchBody['url'] = formData.get('imageUrl');
     fetchBody['userId'] = Cookies.get('id');
-    fetch(`http://${config.server_host}:${config.server_port}/saveOriginalImage`, {
+    fetch(`http://${config.server_host}:${config.server_port}/savePublicImage`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
@@ -33,9 +33,9 @@ const Main = () => {
   }
   useEffect(() => {
     const id = Cookies.get('id');
-    // if (!id) {
-    //   navigate('/sign-in');
-    // }
+    if (!id) {
+      navigate('/sign-in');
+    }
   })
   return (
     <div className="App">
@@ -43,7 +43,7 @@ const Main = () => {
       <div className="auth-wrapper">
         <div className="auth-inner">
           <div>Welcome {firstName} {lastName}!</div>
-          <div>Type the url for an image below to save it to your account.</div>
+          <div>Type the url for an image below to save it to your account, or use the camera tab to take a photo.</div>
           <Form autoComplete="off" className="" onSubmit={saveImage}>
             <FloatingLabel label="Image Url" className="dense mb-3">
               <Form.Control

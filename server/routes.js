@@ -1,7 +1,12 @@
 const mysql = require('mysql');
 const config = require('./config');
 const { v4: uuidv4 } = require('uuid');
+const AWS = require('aws-sdk');
 
+const s3 = new AWS.S3({
+  accessKeyId: config.aws_access_key_id,
+  secretAccessKey: config.aws_secret_access_key,
+})
 const connection = mysql.createConnection({
   host: config.rds_host,
   user: config.rds_user,
@@ -73,7 +78,7 @@ const login = async function (req, res) {
   });
 }
 
-const save_original_image = async function (req, res) {
+const save_public_image = async function (req, res) {
   connection.query(`
     INSERT INTO images (id, userId, url)
     VALUES ('${uuidv4()}', '${req.body.userId}', '${req.body.url}')
@@ -85,6 +90,35 @@ const save_original_image = async function (req, res) {
       res.json({status: 'success'});
     }
   });
+}
+// Assume imgData, imgId, userId
+const save_original_image = async function (req, res) {
+  const buf = new Buffer.from(req.body.imageData.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+  const params = {
+    Bucket: "cis4000-image-storage",
+    Key: req.body.imageId + ".jpeg",
+    Body: buf,
+    ContentType: "image/jpeg",
+    ContentEncoding: "base64"
+  }
+  try {
+    await s3.upload(params).promise();
+    const imageUrl = config.aws_image_base_path + "/" + req.body.imageId + ".jpeg";
+    connection.query(`
+      INSERT INTO images (id, userId, url)
+      VALUES ('${req.body.imageId}', '${req.body.userId}', '${imageUrl}')
+    `, (err, data) => {
+      if (err) {
+        console.log(err);
+        res.json({status: 'rdsFailure'});
+      } else {
+        res.json({status: 'success'});
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({status: 's3Failure'});
+  }
 }
 
 const get_all_user_images = async function (req, res) {
@@ -153,6 +187,7 @@ module.exports = {
   // get_user,
   signup,
   login,
+  save_public_image,
   save_original_image,
   get_all_user_images,
   save_filtered_image,
