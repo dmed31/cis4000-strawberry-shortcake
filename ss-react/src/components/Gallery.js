@@ -63,8 +63,6 @@ const Gallery = () => {
       <div className="auth-wrapper">
         <div className="auth-heading">
             <h3> Welcome to the Gallery! </h3>
-        </div>
-        <div className="auth-inner-large">
             <PhotoAlbum layout="masonry" photos={urls}/>
         </div>
       </div>
