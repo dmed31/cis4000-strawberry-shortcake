@@ -6,6 +6,7 @@ import PhotoAlbum from 'react-photo-album'
 import config from '../config.json'
 
 const Gallery = () => {
+  const admin = Cookies.get('admin');
   const navigate = useNavigate();
   const [urls, setUrls] = useState([]);
   useEffect(() => {
@@ -13,8 +14,25 @@ const Gallery = () => {
     if (!id) {
       navigate('/sign-in');
     }
-    let fetchBody = {userId: id};
-    fetch(`http://${config.server_host}:${config.server_port}/getAllUserImages`, {
+    if (admin === "1") {
+      fetch(`http://${config.server_host}:${config.server_port}/getAllImages`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data['status'] !== 'success') {
+            alert('An error occurred while retrieving the images. Please try again.');
+          } else {
+            const modifiedUrlList = data['data'].map(u => ({src: u.url, width: 400, height: 400}))
+            setUrls(modifiedUrlList);
+          }
+        })
+    } else {
+      let fetchBody = {userId: id};
+      fetch(`http://${config.server_host}:${config.server_port}/getAllUserImages`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
@@ -30,6 +48,7 @@ const Gallery = () => {
           setUrls(modifiedUrlList);
         }
       })
+    }
   }, [])
 
   const pics = [

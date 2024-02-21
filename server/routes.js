@@ -47,8 +47,8 @@ const signup = async function (req, res) {
       res.json({status: 'failure', reason: 'duplicate'});
     } else {
       connection.query(`
-        INSERT INTO users (id, email, password, firstName, lastName)
-        VALUES ('${uuidv4()}', '${req.body.email}', '${req.body.password}', '${req.body.firstName}', '${req.body.lastName}')
+        INSERT INTO users (id, email, password, firstName, lastName, admin)
+        VALUES ('${uuidv4()}', '${req.body.email}', '${req.body.password}', '${req.body.firstName}', '${req.body.lastName}', 0)
       `, (err, data) => {
         if (err) {
           console.log(err);
@@ -136,7 +136,21 @@ const get_all_user_images = async function (req, res) {
   })
 }
 
-// NOT IN USE
+const get_all_images = async function (req, res) {
+  connection.query(`
+    SELECT url
+    FROM images
+  `, (err, data) => {
+    if (err) {
+      console.log(err);
+      res.json({status: 'failure'});
+    } else {
+      res.json({status: 'success', data});
+    }
+  })
+}
+
+// OLD CODE, MUST CHANGE TO INCORPORATE S3
 const save_filtered_image = async function (req, res) {
   connection.query(`
     INSERT INTO images (id, userId, originalImageId, url)
@@ -183,6 +197,22 @@ const add_multi_feedback = async function (req, res) {
   });
 }
 
+const get_all_feedback = async function (req, res) {
+  connection.query(`
+    SELECT url, firstName, lastName, feedbackOne, feedbackTwo, feedbackThree
+    FROM feedback A
+    JOIN users B on A.userId = B.id
+    LEFT JOIN images C on A.imageId = C.id
+  `, (err, data) => {
+    if (err) {
+      console.log(err);
+      res.json({status: 'failure'});
+    } else {
+      res.json({status: 'success', data});
+    }
+  })
+}
+
 module.exports = {
   // get_user,
   signup,
@@ -190,7 +220,9 @@ module.exports = {
   save_public_image,
   save_original_image,
   get_all_user_images,
+  get_all_images,
   save_filtered_image,
   add_basic_feedback,
-  add_multi_feedback
+  add_multi_feedback,
+  get_all_feedback,
 }

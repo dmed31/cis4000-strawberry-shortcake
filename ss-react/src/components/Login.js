@@ -34,6 +34,7 @@ const Login = () => {
           Cookies.set('firstName', userInfo['firstName'], { expires: 1 });
           Cookies.set('lastName', userInfo['lastName'], { expires: 1 });
           Cookies.set('id', userInfo['id'], { expires: 1 });
+          Cookies.set('admin', userInfo['admin'], { expires: 1 });
           navigate('/');
         }
       })

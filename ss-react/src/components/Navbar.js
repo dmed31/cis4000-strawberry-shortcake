@@ -1,15 +1,17 @@
 import React from 'react'
+import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom'
 import { NavDropdown } from 'react-bootstrap'
 
 const Navbar = ({ loggedIn }) => {
+  const admin = Cookies.get('admin');
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top">
       <div className="container">
         <Link className="navbar-brand" to={'/'}>
           Strawberry Shortcake
         </Link>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="navbarTogglerDemo02" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
         <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
@@ -29,17 +31,22 @@ const Navbar = ({ loggedIn }) => {
                 Log Out
               </Link>
             </li>
-            <li className="nav-item">
+            {admin === "0" && <li className="nav-item">
               <Link className="nav-link" to={'/feedback'}>
                 Leave feedback
               </Link>
-            </li>
+            </li>}
+            {admin === "1" && <li className="nav-item">
+              <Link className="nav-link" to={'/feedbackTable'}>
+                Feedback Table
+              </Link>
+            </li>}
             <li className="nav-item">
               <Link className="nav-link" to={'/gallery'}>
                 Gallery
               </Link>
             </li>
-            <NavDropdown title="Upload Image" id="basic-nav-dropdown">
+            {admin === "0" && <NavDropdown title="Upload Image" id="basic-nav-dropdown">
               <NavDropdown.Item>
                 <Link className="dropdown-item" to={'/camera'}>
                   Camera
@@ -50,7 +57,12 @@ const Navbar = ({ loggedIn }) => {
                   External Link
                 </Link>
               </NavDropdown.Item>
-            </NavDropdown>
+            </NavDropdown>}
+            {admin === "0" && <li className="nav-item">
+              <Link className="nav-link" to={'/applyFilter'}>
+                Apply Filter
+              </Link>
+            </li>}
           </ul>}
         </div>
       </div>
