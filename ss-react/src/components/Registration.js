@@ -51,64 +51,81 @@ const Registration = () => {
     <div className="App">
         <Navbar loggedIn={false}/>
         <div className="auth-wrapper">
-          <div className="auth-inner">
-            <form onSubmit={register}>
-              <h3>Sign Up</h3>
-              <div className="mb-3">
-                <label>Email</label>
-                <input
-                  name="email"
-                  type="email"
-                  className="form-control"
-                  required
-                />
+          <form onSubmit={register} className="text-center">
+            <div className="row justify-content-center">
+              <div className="col-md-6">
+                <div className="mb-3 d-flex justify-content-center">
+                  <div className="d-flex flex-column align-items-start mb-3">
+                    <label>Email</label>
+                    <input
+                      name="email"
+                      type="email"
+                      className="form-control rounded"
+                      style={{ width: '320px', margin: 'auto', borderWidth: '1px', borderColor: '#000000'}}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="mb-3 d-flex justify-content-center">
+                  <div className="d-flex flex-column align-items-start mb-3">
+                    <label>First Name</label>
+                    <input
+                      name="firstName"
+                      type="text"
+                      className="form-control rounded"
+                      style={{ width: '320px', margin: 'auto', borderWidth: '1px', borderColor: '#000000'}}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="mb-3 d-flex justify-content-center">
+                  <div className="d-flex flex-column align-items-start mb-3">
+                    <label>Last Name</label>
+                    <input
+                      name="lastName"
+                      type="text" 
+                      className="form-control rounded"
+                      style={{ width: '320px', margin: 'auto', borderWidth: '1px', borderColor: '#000000'}}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="mb-3 d-flex justify-content-center">
+                  <div className="d-flex flex-column align-items-start mb-3">
+                    <label>Password</label>
+                    <input
+                      name="password"
+                      type="password"
+                      className="form-control rounded"
+                      style={{ width: '320px', margin: 'auto', borderWidth: '1px', borderColor: '#000000'}}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="mb-3 d-flex justify-content-center">
+                  <div className="d-flex flex-column align-items-start mb-3">
+                    <label>Confirm Password</label>
+                    <input
+                      name="passwordCheck"
+                      type="password"
+                      className="form-control rounded"
+                      style={{ width: '320px', margin: 'auto', borderWidth: '1px', borderColor: '#000000'}}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <button type="button" className="btn btn-primary btn-md btn-block rounded-pill" 
+                  style={{ width: '200px', height: '45px', backgroundColor: '#FFFFFF', borderColor: '#D9D9D9', color: '#000000', marginTop: '30px'}} onClick={() => navigate('/registration')}>
+                    Sign Up
+                  </button>
+                </div>
+                <p className="forgot-password text-center">
+                  <a href="/sign-in">Already registered?</a>
+                </p>
               </div>
-              <div className="mb-3">
-                <label>First name</label>
-                <input
-                  name="firstName"
-                  type="text"
-                  className="form-control"
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label>Last name</label>
-                <input
-                  name="lastName"
-                  type="text" 
-                  className="form-control"
-                  required 
-                />
-              </div>
-              <div className="mb-3">
-                <label>Password</label>
-                <input
-                  name="password"
-                  type="password"
-                  className="form-control"
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label>Confirm Password</label>
-                <input
-                  name="passwordCheck"
-                  type="password"
-                  className="form-control"
-                  required
-                />
-              </div>
-              <div className="d-grid">
-                <button type="submit" className="btn btn-primary">
-                  Sign Up
-                </button>
-              </div>
-              <p className="forgot-password text-right">
-                <a href="/sign-in">Already registered?</a>
-              </p>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
   )

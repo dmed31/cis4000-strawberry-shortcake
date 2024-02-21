@@ -8,9 +8,9 @@ const Gallery = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const id = Cookies.get('id');
-    if (!id) {
+    /*if (!id) {
       navigate('/sign-in');
-    }
+    }*/
   })
 
   const pics = [
