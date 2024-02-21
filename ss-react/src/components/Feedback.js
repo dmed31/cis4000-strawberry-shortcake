@@ -120,14 +120,14 @@ const Feedback = () => {
                 />
               </FloatingLabel>
               <div className="d-flex justify-content-center align-items-center">
-              <Button
-                style={{ backgroundColor: '#D9D9D9', color: '#000000',  borderColor: '#D9D9D9', fontSize:'14px'}}
-                size="lg"
-                type="submit"
-                className="rounded-pill"
-              >
-                Submit
-              </Button>
+                <Button
+                  style={{ backgroundColor: '#D9D9D9', color: '#000000',  borderColor: '#D9D9D9', fontSize:'14px'}}
+                  size="lg"
+                  type="submit"
+                  className="rounded-pill"
+                >
+                  Submit
+                </Button>
               </div>
             </Form>
           </bd.Paper>

@@ -1,17 +1,36 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import PhotoAlbum from 'react-photo-album'
+import config from '../config.json'
 
 const Gallery = () => {
   const navigate = useNavigate();
+  const [urls, setUrls] = useState([]);
   useEffect(() => {
     const id = Cookies.get('id');
     /*if (!id) {
       navigate('/sign-in');
-    }*/
-  })
+    }
+    let fetchBody = {userId: id};
+    fetch(`http://${config.server_host}:${config.server_port}/getAllUserImages`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(fetchBody)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data['status'] !== 'success') {
+          alert('An error occurred while retrieving the images. Please try again.');
+        } else {
+          const modifiedUrlList = data['data'].map(u => ({src: u.url, width: 400, height: 400}))
+          setUrls(modifiedUrlList);
+        }
+      })
+  }, [])
 
   const pics = [
     { src: "https://lens-storage.storage.googleapis.com/previewimage/2c9a64f4-4406-4eaa-8718-bafcf97ad8fc_360_640", width: 400, height: 800},
@@ -38,17 +57,13 @@ const Gallery = () => {
     { src: 'https://shortcake1-test.s3.amazonaws.com/8.webp', width: 400, height: 800 },
     { src: "https://shortcake1-test.s3.amazonaws.com/9.avif", width: 800, height: 600 },
   ];*/
-
-
   return (
     <div className="App">
       <Navbar loggedIn={true}/>
       <div className="auth-wrapper">
         <div className="auth-heading">
             <h3> Welcome to the Gallery! </h3>
-        </div>
-        <div className="auth-inner-large">
-            <PhotoAlbum layout="masonry" photos={pics}/>
+            <PhotoAlbum layout="masonry" photos={urls}/>
         </div>
       </div>
     </div>

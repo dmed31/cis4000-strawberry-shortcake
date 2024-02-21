@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import Cookies from 'js-cookie'
+import { Form, Button, FloatingLabel } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
+import config from '../config.json';
 import Navbar from './Navbar';
 
 const Main = () => {
