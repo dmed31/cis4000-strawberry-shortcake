@@ -115,7 +115,7 @@ const Registration = () => {
                   </div>
                 </div>
                 <div className="mb-3">
-                  <button type="button" className="btn btn-primary btn-md btn-block rounded-pill" 
+                  <button type="submit" className="btn btn-primary btn-md btn-block rounded-pill" 
                   style={{ width: '200px', height: '45px', backgroundColor: '#FFFFFF', borderColor: '#D9D9D9', color: '#000000', marginTop: '30px'}} onClick={() => navigate('/registration')}>
                     Sign Up
                   </button>

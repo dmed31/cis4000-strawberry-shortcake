@@ -11,6 +11,8 @@ import Navbar from './components/Navbar'
 import Gallery from './components/Gallery'
 import Camera from './components/Camera'
 import ExternalImageLink from './components/ExternalImageLink'
+import FeedbackTable from './components/FeedbackTable'
+import ApplyFilter from './components/ApplyFilter'
 
 const App = () => {
   return (
@@ -20,8 +22,10 @@ const App = () => {
         <Route path="/sign-in" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/feedbackTable" element={<FeedbackTable />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/externalImageLink" element={<ExternalImageLink />} />
+        <Route path="applyFilter" element={<ApplyFilter />} />
         <Route path="/camera" element={<Camera />} />
       </Routes>
     </Router>

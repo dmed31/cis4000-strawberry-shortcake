@@ -8,6 +8,8 @@ import Navbar from './Navbar';
 const Main = () => {
   const firstName = Cookies.get('firstName');
   const lastName = Cookies.get('lastName');
+  const admin = Cookies.get('admin');
+  console.log(typeof(admin))
   const navigate = useNavigate();
   useEffect(() => {
     const id = Cookies.get('id');
@@ -21,6 +23,7 @@ const Main = () => {
       <div className="auth-wrapper">
         <div className="auth-inner">
           <div>Welcome {firstName} {lastName}!</div>
+          {admin === "1" && <div>This is the admin dashboard.</div>}
         </div>
       </div>
     </div>
