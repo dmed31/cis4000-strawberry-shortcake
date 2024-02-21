@@ -10,7 +10,7 @@ const Gallery = () => {
   const [urls, setUrls] = useState([]);
   useEffect(() => {
     const id = Cookies.get('id');
-    /*if (!id) {
+    if (!id) {
       navigate('/sign-in');
     }
     let fetchBody = {userId: id};
@@ -67,7 +67,7 @@ const Gallery = () => {
         </div>
       </div>
     </div>
-  )}
-)}
+  )
+}
 
 export default Gallery
