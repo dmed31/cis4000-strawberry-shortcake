@@ -62,10 +62,28 @@ const Camera = () => {
         <div className="btn-container">
           {imgSrc ?
             <>
-              <Button onClick={resetCamera}>Take Another Photo</Button>
-              <Button onClick={saveImage}>Save Image</Button>
+            <div className="text-center mb-4">
+              <Button onClick={resetCamera} className="mr-3 rounded-pill" 
+              style={{ width: '150px', height: '45px', backgroundColor: '#D9D9D9', 
+              borderColor: '#D9D9D9', color: '#000000', marginTop: '30px' }}>
+                  Retake Photo
+              </Button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <Button className="rounded-pill" 
+              style={{ width: '150px', height: '45px', backgroundColor: '#D9D9D9', 
+              borderColor: '#D9D9D9', color: '#000000', marginTop: '30px'}}>
+                  Apply Filter
+              </Button>
+            </div>
+            <Button onClick={saveImage} className="rounded-pill" 
+            style={{ width: '150px', height: '45px', backgroundColor: 'white', 
+            borderColor: '#D9D9D9', color: '#000000'}}>Save Image</Button>
             </> :
-            <Button onClick={capture}>Capture photo</Button>}
+            <Button onClick={capture}className="rounded-pill" 
+            style={{ width: '150px', height: '45px', backgroundColor: '#D9D9D9', 
+            borderColor: '#D9D9D9', color: '#000000'}}>
+              Take photo
+            </Button>}
         </div>
       </div>
     </div>
