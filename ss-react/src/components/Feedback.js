@@ -45,13 +45,12 @@ const Feedback = () => {
   })
   return (
     <div className="App">
-      <Navbar loggedIn={true}/>
       <div className="auth-wrapper">
         <div className="auth-inner">
           <bd.Paper className="p-3 my-3 mx-auto" style={{ maxWidth: 600 }}>
             <Form autoComplete="off" className="" onSubmit={saveFeedback}>
               <div className="text-primary text-center mb-4">
-                <h3 className="mt-3"  style={{color:'black'}}>Feedback</h3>
+                <h3 className="mt-3"  style={{color:'black'}}>Image Feedback</h3>
               </div>
 
               {/* <FloatingLabel label="Email address" className="dense has-icon mb-3">
@@ -88,54 +87,54 @@ const Feedback = () => {
                 </Col>
               </Row> */}
 
-              <FloatingLabel label="Type" className="dense mb-3">
+              {/* <FloatingLabel label="Type" className="dense mb-3">
                 <Form.Select name="type" placeholder="Type">
                   <option value="suggestion">Suggestion</option>
                   <option value="bugReport">Bug Report</option>
                   <option value="others">Others</option>
                 </Form.Select>
-              </FloatingLabel>
+              </FloatingLabel> */}
 
-              <FloatingLabel label="Question 1" className="dense mb-3">
-                <Form.Control
-                  as="textarea"
-                  name="question1"
-                  placeholder="Question 1"
-                  style={{ height: 50 }}
-                />
-              </FloatingLabel>
-
-              <FloatingLabel label="Question 2" className="dense mb-3">
-                <Form.Control
-                  as="textarea"
-                  name="question2"
-                  placeholder="Question 2"
-                  style={{ height: 50 }}
-                />
-              </FloatingLabel>
-
-              <FloatingLabel label="Question 3" className="dense mb-3">
-                <Form.Control
-                  as="textarea"
-                  name="question3"
-                  placeholder="Question 3"
-                  style={{ height: 50 }}
-                />
-              </FloatingLabel>
-              
-              <FloatingLabel label="Rating" className="dense mb-3">
+              <FloatingLabel label="Rate the quality of the filtered image:" className="dense mb-3">
                 <Form.Select
                   name="dropdownRating"
                   value={dropdownRating}
                   onChange={(e) => setDropdownRating(e.target.value)}
                 >
-                  <option value="">Select rating</option>
-                  <option value="1">1 star</option>
-                  <option value="2">2 stars</option>
-                  <option value="3">3 stars</option>
-                  <option value="4">4 stars</option>
-                  <option value="5">5 stars</option>
+                  <option value="">Select rating:</option>
+                  <option value="1">⭐</option>
+                  <option value="2">⭐⭐</option>
+                  <option value="3">⭐⭐⭐</option>
+                  <option value="4">⭐⭐⭐⭐</option>
+                  <option value="5">⭐⭐⭐⭐⭐</option>
                 </Form.Select>
+              </FloatingLabel>
+
+              <FloatingLabel label="Pros of the filtered image?" className="dense mb-3">
+                <Form.Control
+                  as="textarea"
+                  name="question1"
+                  placeholder=""
+                  style={{ height: 50 }}
+                />
+              </FloatingLabel>
+
+              <FloatingLabel label="What bias do you detect (if any)?" className="dense mb-3">
+                <Form.Control
+                  as="textarea"
+                  name="question2"
+                  placeholder=""
+                  style={{ height: 50 }}
+                />
+              </FloatingLabel>
+
+              <FloatingLabel label="Any additional thoughts?" className="dense mb-3">
+                <Form.Control
+                  as="textarea"
+                  name="question3"
+                  placeholder=""
+                  style={{ height: 50 }}
+                />
               </FloatingLabel>
 
               <div className="d-flex justify-content-center align-items-center">

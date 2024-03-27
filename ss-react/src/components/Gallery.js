@@ -152,6 +152,7 @@ const Gallery = () => {
               </Modal.Footer>
             </Modal>
 
+            {/* TODO: Change onClick to send feedback to a database. */}
             <Modal show={isEnteringFeedback} onHide={onFeedbackClick} fullscreen={true}>
               <Modal.Header closeButton>
                 <Modal.Title>Enter feedback</Modal.Title>
