@@ -1,14 +1,56 @@
 import React, { useState, useEffect } from 'react'
 import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom';
-import Navbar from './Navbar';
+import { Button, Modal } from "react-bootstrap"
 import PhotoAlbum from 'react-photo-album'
+import { useNavigate } from 'react-router-dom';
+import { addToolbarButton, Lightbox } from "yet-another-react-lightbox";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+
+import Navbar from './Navbar';
+import ApplyFilter from './lightbox/ApplyFilter'
+import EnterFeedback from './lightbox/EnterFeedback'
 import config from '../config.json'
 
 const Gallery = () => {
   const admin = Cookies.get('admin');
   const navigate = useNavigate();
   const [urls, setUrls] = useState([]);
+  const [index, setIndex] = useState(-1);
+  const [isApplyingFilter, setIsApplyingFilter] = useState(false);
+  const [isEnteringFeedback, setIsEnteringFeedback] = useState(false);
+
+  const onFilterClick = () => {
+    setIsApplyingFilter(!isApplyingFilter);
+    setIsEnteringFeedback(false);
+  }
+
+  function Filter({ augment }) {
+    augment(({ toolbar, ...restProps }) => ({
+      toolbar: addToolbarButton(toolbar, "my-module", 
+        <ApplyFilter
+          clicked={isApplyingFilter} 
+          onClick={onFilterClick} />),
+      ...restProps,
+    }));
+  }
+
+  const onFeedbackClick = () => {
+    setIsApplyingFilter(false);
+    setIsEnteringFeedback(!isEnteringFeedback);
+  }
+
+  function Feedback({ augment }) {
+    augment(({ toolbar, ...restProps }) => ({
+      toolbar: addToolbarButton(toolbar, "my-module", 
+        <EnterFeedback 
+          clicked={isEnteringFeedback}
+          onClick={onFeedbackClick} />),
+      ...restProps,
+    }));
+  }
+
   useEffect(() => {
     const id = Cookies.get('id');
     if (!id) {
@@ -82,9 +124,47 @@ const Gallery = () => {
       <div className="auth-wrapper">
         <div className="auth-heading">
             <h3> Welcome to the Gallery! </h3>
-            <PhotoAlbum layout="masonry" photos={urls}/>
+            <PhotoAlbum 
+              layout="masonry" 
+              photos={pics}
+              onClick={({ index }) => setIndex(index)} 
+            />
+
+            <Lightbox
+              slides={pics}
+              open={(index >= 0) && (!isApplyingFilter && !isEnteringFeedback)}
+              index={index}
+              close={() => setIndex(-1)}
+              // enable optional lightbox plugins
+              plugins={[Feedback, Filter, Thumbnails]}
+            />
+
+            <Modal show={isApplyingFilter} onHide={onFilterClick} fullscreen={true}>
+              <Modal.Header closeButton>
+                <Modal.Title>Apply filter</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>Apply filter here!</Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={onFilterClick}>
+                  Generate
+                </Button>
+              </Modal.Footer>
+            </Modal>
+
+            <Modal show={isEnteringFeedback} onHide={onFeedbackClick} fullscreen={true}>
+              <Modal.Header closeButton>
+                <Modal.Title>Enter feedback</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>Enter feedback here!</Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={onFeedbackClick}>
+                  Submit
+                </Button>
+              </Modal.Footer>
+            </Modal>
         </div>
       </div>
+
     </div>
   )
 }
