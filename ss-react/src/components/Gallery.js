@@ -12,6 +12,7 @@ import Navbar from './Navbar';
 import ApplyFilter from './lightbox/ApplyFilter'
 import EnterFeedback from './lightbox/EnterFeedback'
 import config from '../config.json'
+import FeedbackC from './Feedback'
 
 const Gallery = () => {
   const admin = Cookies.get('admin');
@@ -155,7 +156,7 @@ const Gallery = () => {
               <Modal.Header closeButton>
                 <Modal.Title>Enter feedback</Modal.Title>
               </Modal.Header>
-              <Modal.Body>Enter feedback here!</Modal.Body>
+              <Modal.Body> <FeedbackC /></Modal.Body>
               <Modal.Footer>
                 <Button variant="primary" onClick={onFeedbackClick}>
                   Submit

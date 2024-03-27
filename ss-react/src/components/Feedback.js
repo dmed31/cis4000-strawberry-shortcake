@@ -5,9 +5,11 @@ import Navbar from "./Navbar";
 import Cookies from 'js-cookie'
 import config from '../config.json';
 import { useNavigate } from "react-router-dom";
+import Rating from "react-rating-stars-component";
 
 const Feedback = () => {
   const navigate = useNavigate();
+  const [dropdownRating, setDropdownRating] = useState('');
   const saveFeedback = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -16,6 +18,7 @@ const Feedback = () => {
     fetchBody['feedbackOne'] = formData.get('question1');
     fetchBody['feedbackTwo'] = formData.get('question2');
     fetchBody['feedbackThree'] = formData.get('question3');
+    fetchBody['dropdownRating'] = dropdownRating;
     fetchBody['userId'] = Cookies.get('id');
     fetch(`http://${config.server_host}:${config.server_port}/addBasicFeedback`, {
       method: 'POST',
@@ -119,6 +122,22 @@ const Feedback = () => {
                   style={{ height: 50 }}
                 />
               </FloatingLabel>
+              
+              <FloatingLabel label="Rating" className="dense mb-3">
+                <Form.Select
+                  name="dropdownRating"
+                  value={dropdownRating}
+                  onChange={(e) => setDropdownRating(e.target.value)}
+                >
+                  <option value="">Select rating</option>
+                  <option value="1">1 star</option>
+                  <option value="2">2 stars</option>
+                  <option value="3">3 stars</option>
+                  <option value="4">4 stars</option>
+                  <option value="5">5 stars</option>
+                </Form.Select>
+              </FloatingLabel>
+
               <div className="d-flex justify-content-center align-items-center">
                 <Button
                   style={{ backgroundColor: '#D9D9D9', color: '#000000',  borderColor: '#D9D9D9', fontSize:'14px'}}
