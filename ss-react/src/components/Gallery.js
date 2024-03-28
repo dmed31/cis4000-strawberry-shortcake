@@ -146,7 +146,11 @@ const Gallery = () => {
   return (
     <div className="App">
       <Navbar loggedIn={true}/>
-      <div className="auth-wrapper">
+      <div>
+        <br /> 
+        <br />
+        <br />
+        <br />
         <div className="auth-heading">
             <h3> Welcome to the Gallery! </h3>
             <PhotoAlbum 
@@ -188,6 +192,10 @@ const Gallery = () => {
               </Modal.Footer>
             </Modal>
         </div>
+        <br /> 
+        <br />
+        <br />
+        <br />
       </div>
 
     </div>

@@ -35,7 +35,11 @@ const FeedbackTable = () => {
   return (
     <div className="App">
       <Navbar loggedIn={true}/>
-      <div className="auth-wrapper">
+      <br /> 
+        <br />
+        <br />
+        <br />
+      <div className="auth-heading">
         <table class="table table-image">
           <thead>
             <tr>
@@ -61,6 +65,10 @@ const FeedbackTable = () => {
           </tbody>
         </table>
       </div>
+      <br /> 
+        <br />
+        <br />
+        <br />
     </div>
   )
 }
