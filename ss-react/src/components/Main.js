@@ -25,13 +25,16 @@ const Main = () => {
         <div className="image-container mb-3">
           <img src={logo} alt="logo.png" width={150} height={150} style={{ marginBottom: '50px'}}/>
         </div>
-        <div className="text-center" style={{ marginBottom: '50px'}}>Welcome to the filter lab! Through this application, you can:
+        <div className="text-center" style={{ marginBottom: '50px'}}>
+          Welcome to the filter lab{admin === "1" && " admin view"}! Through this application, you can:
         </div>
         <ol className="text-left mx-auto" style={{ maxWidth: "400px" }}>
-          <li className="mb-3">Take photos with your camera or upload an image via URL</li>
-          <li className="mb-3">Apply a filter</li>
-          <li className="mb-3">Leave comments on specific photos in the Gallery</li>
-          <li className="mb-3">Give general feedback about the filter</li>
+        {admin === "0" ? <><li className="mb-3">Take photos with your camera or upload an image via URL</li>
+          <li className="mb-3">Apply a filter after taking an image or in the gallery</li>
+          <li className="mb-3">Leave comments on specific photos in the gallery</li>
+          <li className="mb-3">Give general feedback about the filters or website</li></>
+        : <><li className="mb-3">View all user-submitted images</li>
+        <li className="mb-3">View all user-submitted feedback</li></>}
         </ol>
       </div>
     </div>

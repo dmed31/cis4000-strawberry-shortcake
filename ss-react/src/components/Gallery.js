@@ -19,10 +19,33 @@ const Gallery = () => {
   const navigate = useNavigate();
   const [urls, setUrls] = useState([]);
   const [index, setIndex] = useState(-1);
+  const [dbId, setdbId] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [isApplyingFilter, setIsApplyingFilter] = useState(false);
   const [isEnteringFeedback, setIsEnteringFeedback] = useState(false);
 
   const onFilterClick = () => {
+    let fetchBody = {};
+    fetchBody['userId'] = Cookies.get('id');
+    fetchBody['originalImageId'] = dbId;
+    fetchBody['url'] = imageUrl;
+
+    fetch(`http://${config.server_host}:${config.server_port}/saveFilteredImage`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(fetchBody)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data['status'] !== 'success') {
+          alert('An error occurred. Sad.');
+        } else {
+          alert('Successfully saved image!');
+          navigate('/');
+        }
+      })
     setIsApplyingFilter(!isApplyingFilter);
     setIsEnteringFeedback(false);
   }
@@ -69,7 +92,7 @@ const Gallery = () => {
           if (data['status'] !== 'success') {
             alert('An error occurred while retrieving the images. Please try again.');
           } else {
-            const modifiedUrlList = data['data'].map(u => ({src: u.url, width: 400, height: 400}))
+            const modifiedUrlList = data['data'].map(u => ({src: u.url, width: 400, height: 400, dbId: u.id}))
             setUrls(modifiedUrlList);
           }
         })
@@ -87,7 +110,7 @@ const Gallery = () => {
         if (data['status'] !== 'success') {
           alert('An error occurred while retrieving the images. Please try again.');
         } else {
-          const modifiedUrlList = data['data'].map(u => ({src: u.url, width: 400, height: 400}))
+          const modifiedUrlList = data['data'].map(u => ({src: u.url, width: 400, height: 400, dbId: u.id}))
           setUrls(modifiedUrlList);
         }
       })
@@ -105,7 +128,6 @@ const Gallery = () => {
     { src: 'https://d.newsweek.com/en/full/1823238/snapchats-cartoon-3d-style-lens.webp?w=279&f=c23d04375fa0cca167579fdffb2e4b9a', width: 400, height: 800 },
     { src: "https://static.independent.co.uk/2021/06/17/13/Screenshot%202021-06-17%20at%2013.53.07.png?width=1200", width: 800, height: 600}
   ];
-
   //for when amazon links work
 
   /*const pics = [
@@ -119,6 +141,8 @@ const Gallery = () => {
     { src: 'https://shortcake1-test.s3.amazonaws.com/8.webp', width: 400, height: 800 },
     { src: "https://shortcake1-test.s3.amazonaws.com/9.avif", width: 800, height: 600 },
   ];*/
+  console.log(urls)
+
   return (
     <div className="App">
       <Navbar loggedIn={true}/>
@@ -127,12 +151,12 @@ const Gallery = () => {
             <h3> Welcome to the Gallery! </h3>
             <PhotoAlbum 
               layout="masonry" 
-              photos={pics}
-              onClick={({ index }) => setIndex(index)} 
+              photos={urls}
+              onClick={({ index }) => {setIndex(index); setdbId(urls[index].dbId); setImageUrl(urls[index].src)}} 
             />
 
             <Lightbox
-              slides={pics}
+              slides={urls}
               open={(index >= 0) && (!isApplyingFilter && !isEnteringFeedback)}
               index={index}
               close={() => setIndex(-1)}
@@ -156,7 +180,7 @@ const Gallery = () => {
               <Modal.Header closeButton>
                 <Modal.Title>Enter feedback</Modal.Title>
               </Modal.Header>
-              <Modal.Body> <FeedbackC /></Modal.Body>
+              <Modal.Body> <FeedbackC imageId={dbId} imageUrl={imageUrl}/></Modal.Body>
               <Modal.Footer>
                 <Button variant="primary" onClick={onFeedbackClick}>
                   Submit

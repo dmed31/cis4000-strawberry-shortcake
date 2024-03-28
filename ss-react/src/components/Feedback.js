@@ -1,24 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Col, FloatingLabel, Form, Row, Button } from "react-bootstrap";
 import * as bd from "react-basic-design";
 import Navbar from "./Navbar";
 import Cookies from 'js-cookie'
 import config from '../config.json';
 import { useNavigate } from "react-router-dom";
-import Rating from "react-rating-stars-component";
 
-const Feedback = () => {
+const Feedback = ({ imageId, imageUrl }) => {
   const navigate = useNavigate();
-  const [dropdownRating, setDropdownRating] = useState('');
   const saveFeedback = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    if (formData.get('feedbackText') == "") {
+      alert("Please input text in the feedback section.");
+      return;
+    }
     let fetchBody = {};
-    fetchBody['feedbackType'] = formData.get('type');
-    fetchBody['feedbackOne'] = formData.get('question1');
-    fetchBody['feedbackTwo'] = formData.get('question2');
-    fetchBody['feedbackThree'] = formData.get('question3');
-    fetchBody['dropdownRating'] = dropdownRating;
+    fetchBody['feedbackType'] = formData.get('type') ?? "Image";
+    fetchBody['feedbackText'] = formData.get('feedbackText');
+    fetchBody['rating'] = formData.get('rating');
+    if (imageId) {
+      fetchBody['imageId'] = imageId;
+    }
     fetchBody['userId'] = Cookies.get('id');
     fetch(`http://${config.server_host}:${config.server_port}/addBasicFeedback`, {
       method: 'POST',
@@ -51,7 +54,7 @@ const Feedback = () => {
           <bd.Paper className="p-3 my-3 mx-auto" style={{ maxWidth: 600 }}>
             <Form autoComplete="off" className="" onSubmit={saveFeedback}>
               <div className="text-primary text-center mb-4">
-                <h3 className="mt-3"  style={{color:'black'}}>Feedback</h3>
+                <h3 className="mt-3"  style={{color:'black'}}>{imageId && "Image "}Feedback</h3>
               </div>
 
               {/* <FloatingLabel label="Email address" className="dense has-icon mb-3">
@@ -88,24 +91,24 @@ const Feedback = () => {
                 </Col>
               </Row> */}
 
-              <FloatingLabel label="Type" className="dense mb-3">
+              {!imageId && <FloatingLabel label="Type" className="dense mb-3">
                 <Form.Select name="type" placeholder="Type">
-                  <option value="suggestion">Suggestion</option>
-                  <option value="bugReport">Bug Report</option>
-                  <option value="others">Others</option>
+                  <option value="Suggestion">Suggestion</option>
+                  <option value="Bug Report">Bug Report</option>
+                  <option value="Other">Other</option>
                 </Form.Select>
-              </FloatingLabel>
+              </FloatingLabel>}
 
-              <FloatingLabel label="Question 1" className="dense mb-3">
+              <FloatingLabel label="Feedback" className="dense mb-3">
                 <Form.Control
                   as="textarea"
-                  name="question1"
-                  placeholder="Question 1"
+                  name="feedbackText"
+                  placeholder="Feedback"
                   style={{ height: 50 }}
                 />
               </FloatingLabel>
 
-              <FloatingLabel label="Question 2" className="dense mb-3">
+              {/* <FloatingLabel label="Question 2" className="dense mb-3">
                 <Form.Control
                   as="textarea"
                   name="question2"
@@ -121,22 +124,22 @@ const Feedback = () => {
                   placeholder="Question 3"
                   style={{ height: 50 }}
                 />
-              </FloatingLabel>
+              </FloatingLabel> */}
               
+              {imageId && 
               <FloatingLabel label="Rating" className="dense mb-3">
                 <Form.Select
-                  name="dropdownRating"
-                  value={dropdownRating}
-                  onChange={(e) => setDropdownRating(e.target.value)}
+                  name="rating"
+                  placeholder="rating"
                 >
-                  <option value="">Select rating</option>
-                  <option value="1">1 star</option>
-                  <option value="2">2 stars</option>
-                  <option value="3">3 stars</option>
-                  <option value="4">4 stars</option>
-                  <option value="5">5 stars</option>
+                  <option value={0}>Select rating</option>
+                  <option value={1}>1 star</option>
+                  <option value={2}>2 stars</option>
+                  <option value={3}>3 stars</option>
+                  <option value={4}>4 stars</option>
+                  <option value={5}>5 stars</option>
                 </Form.Select>
-              </FloatingLabel>
+              </FloatingLabel>}
 
               <div className="d-flex justify-content-center align-items-center">
                 <Button

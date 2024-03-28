@@ -39,28 +39,28 @@ const FeedbackTable = () => {
         <table class="table table-image">
           <thead>
             <tr>
-              <th>Image</th>
+              <th>Feedback Type</th>
               <th>Name</th>
-              <th>Feedback One</th>
-              <th>Feedback Two</th>
-              <th>Feedback Three</th>
+              <th>Feedback</th>
+              <th>{"Rating (if applicable)"}</th>
+              <th>{"Image (if applicable)"}</th>
             </tr>
           </thead>
           <tbody>
             {feedback.map(f => (
               <tr>
-                <td className="w-25">
-                  {!f.url ? "Non-image Feedback" : <img src={f.url} alt="FeedbackImage" className="img-fluid img-thumbnail" />}
-                </td>
+                <td>{f.feedbackType}</td>
                 <td>{f.firstName} {f.lastName}</td>
-                <td>{f.feedbackOne}</td>
-                <td>{f.feedbackTwo}</td>
-                <td>{f.feedbackThree}</td>
+                <td>{f.feedbackText}</td>
+                <td>{f.rating == 0 ? "N/A" : f.rating}</td>
+                <td className="w-25">
+                  {!f.url ? "N/A" : <img src={f.url} alt="FeedbackImage" className="img-fluid img-thumbnail" />}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
-\      </div>
+      </div>
     </div>
   )
 }
