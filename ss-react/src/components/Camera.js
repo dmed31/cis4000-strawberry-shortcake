@@ -68,12 +68,12 @@ const Camera = () => {
               borderColor: '#D9D9D9', color: '#000000', marginTop: '30px' }}>
                   Retake Photo
               </Button>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              {/* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               <Button className="rounded-pill" 
               style={{ width: '150px', height: '45px', backgroundColor: '#D9D9D9', 
               borderColor: '#D9D9D9', color: '#000000', marginTop: '30px'}}>
                   Apply Filter
-              </Button>
+              </Button> */}
             </div>
             <Button onClick={saveImage} className="rounded-pill" 
             style={{ width: '150px', height: '45px', backgroundColor: 'white', 

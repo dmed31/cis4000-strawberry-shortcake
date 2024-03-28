@@ -126,6 +126,8 @@ const get_all_images = async function (req, res) {
 // Assume imgData, imgId, userId
 const save_original_image = async function (req, res) {
   const buf = new Buffer.from(req.body.imageData.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+  console.log(req.body.imageData);
+  console.log(buf);
   const params = {
     Bucket: "cis4000-image-storage",
     Key: req.body.imageId + ".jpeg",
@@ -170,14 +172,18 @@ const save_filtered_image = async function (req, res) {
   const command = new InvokeEndpointCommand(input);
   const response = await sagemakerClient.send(command);
 
-  // console.log(typeof(response.Body));
-console.log(response.Body);
+  // console.log(responseJSON);
   const buf = new Buffer.from(response.Body, 'base64');
+  const buf1 = buf + "";
+  const finalresult = JSON.parse(buf1);
+  const finalbody = finalresult['generated_images'][0];
+  const finalbuf = new Buffer.from(finalbody, 'base64');
+  console.log(finalbuf);
   const filteredImageId = uuidv4();
   const params = {
     Bucket: "cis4000-image-storage",
     Key: filteredImageId + ".jpeg",
-    Body: buf,
+    Body: finalbuf,
     ContentType: "image/jpeg",
     ContentEncoding: "base64"
   }
@@ -187,33 +193,33 @@ console.log(response.Body);
 
 
     console.log(imageUrl);
-    // connection.query(`
-    //   INSERT INTO images (id, userId, url)
-    //   VALUES ('${req.body.imageId}', '${req.body.userId}', '${imageUrl}')
-    // `, (err, data) => {
-    //   if (err) {
-    //     console.log(err);
-    //     res.json({status: 'rdsFailure'});
-    //   } else {
-    //     res.json({status: 'success'});
-    //   }
-    // });
+    connection.query(`
+      INSERT INTO images (id, userId, originalImageId, url)
+      VALUES ('${filteredImageId}', '${req.body.userId}', '${req.body.originalImageId}', '${imageUrl}')
+    `, (err, data) => {
+      if (err) {
+        console.log(err);
+        res.json({status: 'rdsFailure'});
+      } else {
+        res.json({status: 'success'});
+      }
+    });
   } catch (err) {
     console.log(err);
-    res.json({status: 's3Failure'});
+    res.json({status: 'somefailure'});
   }
 
-  connection.query(`
-    INSERT INTO images (id, userId, originalImageId, url)
-    VALUES (${uuidv4()}, ${req.body.userId}, ${req.body.originalImageId} ${req.body.url})
-  `, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.json({status: 'failure'});
-    } else {
-      res.json({status: 'success'});
-    }
-  });
+  // connection.query(`
+  //   INSERT INTO images (id, userId, originalImageId, url)
+  //   VALUES (${uuidv4()}, ${req.body.userId}, ${req.body.originalImageId} ${req.body.url})
+  // `, (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //     res.json({status: 'failure'});
+  //   } else {
+  //     res.json({status: 'success'});
+  //   }
+  // });
 }
 
 const add_basic_feedback = async function (req, res) {
