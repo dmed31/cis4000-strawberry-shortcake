@@ -55,7 +55,8 @@ const Camera = () => {
       <Navbar loggedIn={true}/>
       <div className="container">
         {imgSrc ? (
-          <img src={imgSrc} alt="webcamImg" />
+          <><br /> <br /><br /><br />
+          <img src={imgSrc} alt="webcamImg" /></>
         ) : (
           <Webcam height={600} width={600} ref={webcamRef} mirrored={true} screenshotFormat="image/jpeg"/>
         )}

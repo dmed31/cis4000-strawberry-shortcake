@@ -6,7 +6,7 @@ import Cookies from 'js-cookie'
 import config from '../config.json';
 import { useNavigate } from "react-router-dom";
 
-const Feedback = ({ imageId, imageUrl }) => {
+const Feedback = ({ imageId, imageUrl, originalImageId }) => {
   const navigate = useNavigate();
   const saveFeedback = (e) => {
     e.preventDefault();
@@ -21,6 +21,9 @@ const Feedback = ({ imageId, imageUrl }) => {
     fetchBody['rating'] = formData.get('rating');
     if (imageId) {
       fetchBody['imageId'] = imageId;
+    }
+    if (originalImageId) {
+      fetchBody['originalImageId'] = originalImageId;
     }
     fetchBody['userId'] = Cookies.get('id');
     fetch(`http://${config.server_host}:${config.server_port}/addBasicFeedback`, {
@@ -91,6 +94,8 @@ const Feedback = ({ imageId, imageUrl }) => {
                 </Col>
               </Row> */}
 
+              {imageUrl && <><img src={imageUrl} alt="FeedbackImg" style={{objectFit: "contain", width: '308px'}}/><br />
+              <br /></>}
               {!imageId && <FloatingLabel label="Type" className="dense mb-3">
                 <Form.Select name="type" placeholder="Type">
                   <option value="Suggestion">Suggestion</option>

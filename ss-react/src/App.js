@@ -25,7 +25,7 @@ const App = () => {
         <Route path="/feedbackTable" element={<FeedbackTable />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/externalImageLink" element={<ExternalImageLink />} />
-        <Route path="applyFilter" element={<ApplyFilter />} />
+        <Route path="/applyFilter/:imageId" element={<ApplyFilter />} />
         <Route path="/camera" element={<Camera />} />
       </Routes>
     </Router>

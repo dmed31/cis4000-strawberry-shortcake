@@ -96,9 +96,10 @@ const save_public_image = async function (req, res) {
 
 const get_all_user_images = async function (req, res) {
   connection.query(`
-    SELECT id, url
-    FROM images
-    WHERE userId='${req.body.userId}'
+    SELECT A.id, A.originalImageId, A.url AS newUrl, B.url AS oldUrl
+    FROM images A
+    LEFT JOIN images B ON A.originalImageId = B.id
+    WHERE A.userId='${req.body.userId}'
   `, (err, data) => {
     if (err) {
       console.log(err);
@@ -111,8 +112,9 @@ const get_all_user_images = async function (req, res) {
 
 const get_all_images = async function (req, res) {
   connection.query(`
-    SELECT id, url
-    FROM images
+    SELECT A.id, A.originalImageId, A.url AS newUrl, B.url AS oldUrl
+    FROM images A
+    LEFT JOIN images B ON A.originalImageId = B.id
   `, (err, data) => {
     if (err) {
       console.log(err);
@@ -155,7 +157,6 @@ const save_original_image = async function (req, res) {
   }
 }
 
-// OLD CODE, MUST CHANGE TO INCORPORATE S3
 const save_filtered_image = async function (req, res) {
   const sagemakerClient = new SageMakerRuntimeClient({ region: "us-east-1",accessKeyId: config.aws_access_key_id,
   secretAccessKey: config.aws_secret_access_key });
@@ -165,7 +166,7 @@ const save_filtered_image = async function (req, res) {
     "inputs": prompt
   };
   const input = {
-    EndpointName: "huggingface-pytorch-inference-2024-03-27-23-46-40-542",
+    EndpointName: "huggingface-pytorch-inference-2024-03-28-20-04-37-705",
     Body: JSON.stringify(payload),
     ContentType: "application/json"
   };
@@ -178,7 +179,7 @@ const save_filtered_image = async function (req, res) {
   const finalresult = JSON.parse(buf1);
   const finalbody = finalresult['generated_images'][0];
   const finalbuf = new Buffer.from(finalbody, 'base64');
-  console.log(finalbuf);
+  // console.log(finalbuf);
   const filteredImageId = uuidv4();
   const params = {
     Bucket: "cis4000-image-storage",
@@ -201,12 +202,12 @@ const save_filtered_image = async function (req, res) {
         console.log(err);
         res.json({status: 'rdsFailure'});
       } else {
-        res.json({status: 'success'});
+        res.json({status: 'success', newImageUrl: imageUrl});
       }
     });
   } catch (err) {
     console.log(err);
-    res.json({status: 'somefailure'});
+    res.json({status: 's3Failure'});
   }
 
   // connection.query(`
@@ -224,8 +225,8 @@ const save_filtered_image = async function (req, res) {
 
 const add_basic_feedback = async function (req, res) {
   connection.query(`
-    INSERT INTO feedback (id, userId, imageId, feedbackType, feedbackText, rating)
-    VALUES ('${uuidv4()}', '${req.body.userId}', ${req.body.imageId ? `\'${req.body.imageId}\'` : 'null'}, '${req.body.feedbackType}', '${req.body.feedbackText}', '${req.body.rating}')
+    INSERT INTO feedback (id, userId, imageId, originalImageId, feedbackType, feedbackText, rating)
+    VALUES ('${uuidv4()}', '${req.body.userId}', ${req.body.imageId ? `\'${req.body.imageId}\'` : 'null'}, ${req.body.originalImageId ? `\'${req.body.originalImageId}\'` : 'null'}, '${req.body.feedbackType}', '${req.body.feedbackText}', '${req.body.rating}')
   `, (err, data) => {
     if (err) {
       console.log(err);
@@ -256,10 +257,11 @@ const add_multi_feedback = async function (req, res) {
 
 const get_all_feedback = async function (req, res) {
   connection.query(`
-    SELECT url, firstName, lastName, feedbackType, feedbackText, rating
+    SELECT C.url as newUrl, D.url AS originalUrl, firstName, lastName, feedbackType, feedbackText, rating
     FROM feedback A
     JOIN users B on A.userId = B.id
     LEFT JOIN images C on A.imageId = C.id
+    LEFT JOIN images D on A.originalImageId = D.id
   `, (err, data) => {
     if (err) {
       console.log(err);

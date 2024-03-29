@@ -13,41 +13,48 @@ import ApplyFilter from './lightbox/ApplyFilter'
 import EnterFeedback from './lightbox/EnterFeedback'
 import config from '../config.json'
 import FeedbackC from './Feedback'
+import ApplyFilterC from './ApplyFilter'
 
 const Gallery = () => {
   const admin = Cookies.get('admin');
   const navigate = useNavigate();
   const [urls, setUrls] = useState([]);
+  const [view, setView] = useState(false);
   const [index, setIndex] = useState(-1);
-  const [dbId, setdbId] = useState("");
+  const [dbId, setDbId] = useState("");
+  const [dbOid, setDbOid] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [isApplyingFilter, setIsApplyingFilter] = useState(false);
   const [isEnteringFeedback, setIsEnteringFeedback] = useState(false);
 
   const onFilterClick = () => {
-    let fetchBody = {};
-    fetchBody['userId'] = Cookies.get('id');
-    fetchBody['originalImageId'] = dbId;
-    fetchBody['url'] = imageUrl;
+    // let fetchBody = {};
+    // fetchBody['userId'] = Cookies.get('id');
+    // fetchBody['originalImageId'] = dbId;
+    // fetchBody['url'] = imageUrl;
 
-    fetch(`http://${config.server_host}:${config.server_port}/saveFilteredImage`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(fetchBody)
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data['status'] !== 'success') {
-          alert('An error occurred. Sad.');
-        } else {
-          alert('Successfully saved image!');
-          navigate('/');
-        }
-      })
+    // fetch(`http://${config.server_host}:${config.server_port}/saveFilteredImage`, {
+    //   method: 'POST',
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify(fetchBody)
+    // })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     if (data['status'] !== 'success') {
+    //       alert('An error occurred. Sad.');
+    //     } else {
+    //       alert('Successfully saved image!');
+    //       navigate('/');
+    //     }
+    //   })
     setIsApplyingFilter(!isApplyingFilter);
     setIsEnteringFeedback(false);
+  }
+
+  const changeView = () => {
+    setView(!view);
   }
 
   function Filter({ augment }) {
@@ -92,7 +99,7 @@ const Gallery = () => {
           if (data['status'] !== 'success') {
             alert('An error occurred while retrieving the images. Please try again.');
           } else {
-            const modifiedUrlList = data['data'].map(u => ({src: u.url, width: 400, height: 400, dbId: u.id}))
+            const modifiedUrlList = data['data'].map(u => ({src: u.newUrl, width: 400, height: 400, dbId: u.id, dbOid: u.originalImageId, oldUrl: u.oldUrl}))
             setUrls(modifiedUrlList);
           }
         })
@@ -110,7 +117,7 @@ const Gallery = () => {
         if (data['status'] !== 'success') {
           alert('An error occurred while retrieving the images. Please try again.');
         } else {
-          const modifiedUrlList = data['data'].map(u => ({src: u.url, width: 400, height: 400, dbId: u.id}))
+          const modifiedUrlList = data['data'].map(u => ({src: u.newUrl, width: 400, height: 400, dbId: u.id, dbOid: u.originalImageId, oldUrl: u.oldUrl}))
           setUrls(modifiedUrlList);
         }
       })
@@ -153,11 +160,38 @@ const Gallery = () => {
         <br />
         <div className="auth-heading">
             <h3> Welcome to the Gallery! </h3>
-            <PhotoAlbum 
+            <Button onClick={changeView} className="rounded-pill" 
+            style={{ width: '150px', height: '45px', backgroundColor: '#CACACA', 
+            borderColor: '#D9D9D9', color: '#000000'}}>Change View</Button>
+            <br /><br />
+            {!view && <PhotoAlbum 
               layout="masonry" 
               photos={urls}
-              onClick={({ index }) => {setIndex(index); setdbId(urls[index].dbId); setImageUrl(urls[index].src)}} 
-            />
+              onClick={({ index }) => {setIndex(index); setDbId(urls[index].dbId); setImageUrl(urls[index].src); setDbOid(urls[index].dbOid)}} 
+            />}
+            {view && 
+            <table class="table table-image">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Base Image {"(if applicable)"}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {urls.map(f => (
+                <tr>
+                  <td className="w-25">
+                    {!f.src ? "N/A" : <img src={f.src} alt="GalleryImage" className="img-fluid img-thumbnail" />}
+                  </td>
+                  <td className="w-25">
+                    {!f.oldUrl ? "N/A" : <img src={f.oldUrl} alt="BaseImage" className="img-fluid img-thumbnail" />}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+            
+            }
 
             <Lightbox
               slides={urls}
@@ -172,10 +206,10 @@ const Gallery = () => {
               <Modal.Header closeButton>
                 <Modal.Title>Apply filter</Modal.Title>
               </Modal.Header>
-              <Modal.Body>Apply filter here!</Modal.Body>
+              <Modal.Body><ApplyFilterC imageId={dbId} imageUrl={imageUrl}/></Modal.Body>
               <Modal.Footer>
-                <Button variant="primary" onClick={onFilterClick}>
-                  Generate
+                <Button variant="danger" onClick={onFilterClick}>
+                  Exit
                 </Button>
               </Modal.Footer>
             </Modal>
@@ -184,10 +218,10 @@ const Gallery = () => {
               <Modal.Header closeButton>
                 <Modal.Title>Enter feedback</Modal.Title>
               </Modal.Header>
-              <Modal.Body> <FeedbackC imageId={dbId} imageUrl={imageUrl}/></Modal.Body>
+              <Modal.Body> <FeedbackC imageId={dbId} imageUrl={imageUrl} originalImageId={dbOid}/></Modal.Body>
               <Modal.Footer>
-                <Button variant="primary" onClick={onFeedbackClick}>
-                  Submit
+                <Button variant="danger" onClick={onFeedbackClick}>
+                  Exit
                 </Button>
               </Modal.Footer>
             </Modal>

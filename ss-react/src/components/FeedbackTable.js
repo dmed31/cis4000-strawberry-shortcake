@@ -48,6 +48,7 @@ const FeedbackTable = () => {
               <th>Feedback</th>
               <th>{"Rating (if applicable)"}</th>
               <th>{"Image (if applicable)"}</th>
+              <th>{"Base Image (if applicable)"}</th>
             </tr>
           </thead>
           <tbody>
@@ -58,7 +59,10 @@ const FeedbackTable = () => {
                 <td>{f.feedbackText}</td>
                 <td>{f.rating == 0 ? "N/A" : f.rating}</td>
                 <td className="w-25">
-                  {!f.url ? "N/A" : <img src={f.url} alt="FeedbackImage" className="img-fluid img-thumbnail" />}
+                  {!f.newUrl ? "N/A" : <img src={f.newUrl} alt="FeedbackImage" className="img-fluid img-thumbnail" />}
+                </td>
+                <td className="w-25">
+                  {!f.originalUrl ? "N/A" : <img src={f.originalUrl} alt="FeedbackImage" className="img-fluid img-thumbnail" />}
                 </td>
               </tr>
             ))}

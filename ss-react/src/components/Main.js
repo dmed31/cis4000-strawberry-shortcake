@@ -37,7 +37,7 @@ const Main = () => {
           <li className="mb-3">
             View all photos, original or generated, in <a href="/gallery">the gallery</a>!
           </li>
-          <li className="mb-3">Apply a filter after taking an image or in the gallery.</li>
+          <li className="mb-3">Apply a filter in <a href="/gallery">the gallery</a>.</li>
           <li className="mb-3">
             Provide specific feedback on photos in the gallery 
             and <a href="/feedback">general feedback</a> about the filters or website.
