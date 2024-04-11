@@ -8,7 +8,7 @@ const Navbar = ({ loggedIn }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top">
       <div className="container">
-        <Link className="navbar-brand" to={'/'}>
+        <Link className="navbar-brand" to={'/'} style={{fontWeight: 'bold'}}>
           Strawberry Shortcake
         </Link>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="navbarTogglerDemo02" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
