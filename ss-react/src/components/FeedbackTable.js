@@ -46,7 +46,9 @@ const FeedbackTable = () => {
               <th>Feedback Type</th>
               <th>Name</th>
               <th>Feedback</th>
-              <th>{"Rating (if applicable)"}</th>
+              <th>{"Validity Rating (if applicable)"}</th>
+              <th>{"Satisfaction Rating (if applicable)"}</th>
+              <th>{"Filter Prompt (if applicable)"}</th>
               <th>{"Image (if applicable)"}</th>
               <th>{"Base Image (if applicable)"}</th>
             </tr>
@@ -57,7 +59,9 @@ const FeedbackTable = () => {
                 <td>{f.feedbackType}</td>
                 <td>{f.firstName} {f.lastName}</td>
                 <td>{f.feedbackText}</td>
-                <td>{f.rating == 0 ? "N/A" : f.rating}</td>
+                <td>{f.ratingOne == 0 ? "N/A" : f.ratingOne}</td>
+                <td>{f.ratingTwo == 0 ? "N/A" : f.ratingTwo}</td>
+                <td>{f.filterPrompt ? f.filterPrompt : "N/A"}</td>
                 <td className="w-25">
                   {!f.newUrl ? "N/A" : <img src={f.newUrl} alt="FeedbackImage" className="img-fluid img-thumbnail" />}
                 </td>

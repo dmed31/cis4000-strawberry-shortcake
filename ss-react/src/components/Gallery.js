@@ -167,7 +167,7 @@ const Gallery = () => {
             {!view && <PhotoAlbum 
               layout="masonry" 
               photos={urls}
-              onClick={({ index }) => {setIndex(index); setDbId(urls[index].dbId); setImageUrl(urls[index].src); setDbOid(urls[index].dbOid)}} 
+              onClick={({ index }) => {setIndex(index); setDbId(urls[index].dbId); setImageUrl(urls[index].src); setDbOid(urls[index].dbOid); console.log(dbId)}} 
             />}
             {view && 
             <table class="table table-image">
