@@ -117,7 +117,7 @@ const Gallery = () => {
         if (data['status'] !== 'success') {
           alert('An error occurred while retrieving the images. Please try again.');
         } else {
-          const modifiedUrlList = data['data'].map(u => ({src: u.newUrl, width: 400, height: 400, dbId: u.id, dbOid: u.originalImageId, oldUrl: u.oldUrl}))
+          const modifiedUrlList = data['data'].map(u => ({src: u.newUrl, width: 400, height: 400, dbId: u.id, dbOid: u.originalImageId, oldUrl: u.oldUrl, prompt: u.filterPrompt}))
           setUrls(modifiedUrlList);
         }
       })
@@ -173,21 +173,27 @@ const Gallery = () => {
             <table class="table table-image">
             <thead>
               <tr>
-                <th>Image</th>
-                <th>Base Image {"(if applicable)"}</th>
+                <th>Base Image</th>
+                <th>Filtered Image</th>
+                <th>Prompt</th>
               </tr>
             </thead>
             <tbody>
-              {urls.map(f => (
+              {urls.map(f => {
+                if (!f.oldUrl) {
+                  return <></>
+                }
+                return (
                 <tr>
-                  <td className="w-25">
-                    {!f.src ? "N/A" : <img src={f.src} alt="GalleryImage" className="img-fluid img-thumbnail" />}
-                  </td>
                   <td className="w-25">
                     {!f.oldUrl ? "N/A" : <img src={f.oldUrl} alt="BaseImage" className="img-fluid img-thumbnail" />}
                   </td>
+                  <td className="w-25">
+                    {!f.src ? "N/A" : <img src={f.src} alt="GalleryImage" className="img-fluid img-thumbnail" />}
+                  </td>
+                  <td>{f.prompt}</td>
                 </tr>
-              ))}
+              )})}
             </tbody>
           </table>
             
