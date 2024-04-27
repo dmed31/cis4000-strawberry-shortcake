@@ -13,18 +13,48 @@ import ApplyFilter from './lightbox/ApplyFilter'
 import EnterFeedback from './lightbox/EnterFeedback'
 import config from '../config.json'
 import FeedbackC from './Feedback'
+import ApplyFilterC from './ApplyFilter'
 
 const Gallery = () => {
   const admin = Cookies.get('admin');
   const navigate = useNavigate();
   const [urls, setUrls] = useState([]);
+  const [view, setView] = useState(false);
   const [index, setIndex] = useState(-1);
+  const [dbId, setDbId] = useState("");
+  const [dbOid, setDbOid] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [isApplyingFilter, setIsApplyingFilter] = useState(false);
   const [isEnteringFeedback, setIsEnteringFeedback] = useState(false);
 
   const onFilterClick = () => {
+    // let fetchBody = {};
+    // fetchBody['userId'] = Cookies.get('id');
+    // fetchBody['originalImageId'] = dbId;
+    // fetchBody['url'] = imageUrl;
+
+    // fetch(`http://${config.server_host}:${config.server_port}/saveFilteredImage`, {
+    //   method: 'POST',
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify(fetchBody)
+    // })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     if (data['status'] !== 'success') {
+    //       alert('An error occurred. Sad.');
+    //     } else {
+    //       alert('Successfully saved image!');
+    //       navigate('/');
+    //     }
+    //   })
     setIsApplyingFilter(!isApplyingFilter);
     setIsEnteringFeedback(false);
+  }
+
+  const changeView = () => {
+    setView(!view);
   }
 
   function Filter({ augment }) {
@@ -69,7 +99,7 @@ const Gallery = () => {
           if (data['status'] !== 'success') {
             alert('An error occurred while retrieving the images. Please try again.');
           } else {
-            const modifiedUrlList = data['data'].map(u => ({src: u.url, width: 400, height: 400}))
+            const modifiedUrlList = data['data'].map(u => ({src: u.newUrl, width: 400, height: 400, dbId: u.id, dbOid: u.originalImageId, oldUrl: u.oldUrl, prompt: u.filterPrompt}))
             setUrls(modifiedUrlList);
           }
         })
@@ -87,7 +117,7 @@ const Gallery = () => {
         if (data['status'] !== 'success') {
           alert('An error occurred while retrieving the images. Please try again.');
         } else {
-          const modifiedUrlList = data['data'].map(u => ({src: u.url, width: 400, height: 400}))
+          const modifiedUrlList = data['data'].map(u => ({src: u.newUrl, width: 400, height: 400, dbId: u.id, dbOid: u.originalImageId, oldUrl: u.oldUrl, prompt: u.filterPrompt}))
           setUrls(modifiedUrlList);
         }
       })
@@ -105,7 +135,6 @@ const Gallery = () => {
     { src: 'https://d.newsweek.com/en/full/1823238/snapchats-cartoon-3d-style-lens.webp?w=279&f=c23d04375fa0cca167579fdffb2e4b9a', width: 400, height: 800 },
     { src: "https://static.independent.co.uk/2021/06/17/13/Screenshot%202021-06-17%20at%2013.53.07.png?width=1200", width: 800, height: 600}
   ];
-
   //for when amazon links work
 
   /*const pics = [
@@ -119,20 +148,59 @@ const Gallery = () => {
     { src: 'https://shortcake1-test.s3.amazonaws.com/8.webp', width: 400, height: 800 },
     { src: "https://shortcake1-test.s3.amazonaws.com/9.avif", width: 800, height: 600 },
   ];*/
+  console.log(urls)
+
   return (
     <div className="App">
       <Navbar loggedIn={true}/>
-      <div className="auth-wrapper">
+      <div>
+        <br /> 
+        <br />
+        <br />
+        <br />
         <div className="auth-heading">
             <h3> Welcome to the Gallery! </h3>
-            <PhotoAlbum 
+            <Button onClick={changeView} className="rounded-pill" 
+            style={{ width: '150px', height: '45px', backgroundColor: '#CACACA', 
+            borderColor: '#D9D9D9', color: '#000000'}}>Change View</Button>
+            <br /><br />
+            {!view && <PhotoAlbum 
               layout="masonry" 
-              photos={pics}
-              onClick={({ index }) => setIndex(index)} 
-            />
+              photos={urls}
+              onClick={({ index }) => {setIndex(index); setDbId(urls[index].dbId); setImageUrl(urls[index].src); setDbOid(urls[index].dbOid); console.log(dbId)}} 
+            />}
+            {view && 
+            <table class="table table-image">
+            <thead>
+              <tr>
+                <th>Base Image</th>
+                <th>Filtered Image</th>
+                <th>Prompt</th>
+              </tr>
+            </thead>
+            <tbody>
+              {urls.map(f => {
+                if (!f.oldUrl) {
+                  return <></>
+                }
+                return (
+                <tr>
+                  <td className="w-25">
+                    {!f.oldUrl ? "N/A" : <img src={f.oldUrl} alt="BaseImage" className="img-fluid img-thumbnail" />}
+                  </td>
+                  <td className="w-25">
+                    {!f.src ? "N/A" : <img src={f.src} alt="GalleryImage" className="img-fluid img-thumbnail" />}
+                  </td>
+                  <td>{f.prompt}</td>
+                </tr>
+              )})}
+            </tbody>
+          </table>
+            
+            }
 
             <Lightbox
-              slides={pics}
+              slides={urls}
               open={(index >= 0) && (!isApplyingFilter && !isEnteringFeedback)}
               index={index}
               close={() => setIndex(-1)}
@@ -144,10 +212,10 @@ const Gallery = () => {
               <Modal.Header closeButton>
                 <Modal.Title>Apply filter</Modal.Title>
               </Modal.Header>
-              <Modal.Body>Apply filter here!</Modal.Body>
+              <Modal.Body><ApplyFilterC imageId={dbId} imageUrl={imageUrl}/></Modal.Body>
               <Modal.Footer>
-                <Button variant="primary" onClick={onFilterClick}>
-                  Generate
+                <Button variant="danger" onClick={onFilterClick}>
+                  Exit
                 </Button>
               </Modal.Footer>
             </Modal>
@@ -157,14 +225,18 @@ const Gallery = () => {
               <Modal.Header closeButton>
                 <Modal.Title>Enter feedback</Modal.Title>
               </Modal.Header>
-              <Modal.Body> <FeedbackC /></Modal.Body>
+              <Modal.Body> <FeedbackC imageId={dbId} imageUrl={imageUrl} originalImageId={dbOid}/></Modal.Body>
               <Modal.Footer>
-                <Button variant="primary" onClick={onFeedbackClick}>
-                  Submit
+                <Button variant="danger" onClick={onFeedbackClick}>
+                  Exit
                 </Button>
               </Modal.Footer>
             </Modal>
         </div>
+        <br /> 
+        <br />
+        <br />
+        <br />
       </div>
 
     </div>

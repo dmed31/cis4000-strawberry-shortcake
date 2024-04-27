@@ -18,7 +18,9 @@ const Feedback = ({ imageId, imageUrl, originalImageId }) => {
     let fetchBody = {};
     fetchBody['feedbackType'] = formData.get('type') ?? "Image";
     fetchBody['feedbackText'] = formData.get('feedbackText');
-    fetchBody['rating'] = formData.get('rating');
+    fetchBody['ratingOne'] = formData.get('ratingOne');
+    fetchBody['ratingTwo'] = formData.get('ratingTwo');
+
     if (imageId) {
       fetchBody['imageId'] = imageId;
     }
@@ -132,19 +134,40 @@ const Feedback = ({ imageId, imageUrl, originalImageId }) => {
               </FloatingLabel> */}
               
               {imageId && 
-              <FloatingLabel label="Rating" className="dense mb-3">
+              <>
+              <br />
+              <p> Is the output image what you expected? </p>
+              <FloatingLabel label="Validity Rating" className="dense mb-3">
                 <Form.Select
-                  name="rating"
-                  placeholder="rating"
+                  name="ratingOne"
+                  placeholder="ratingOne"
                 >
                   <option value={0}>Select rating</option>
-                  <option value={1}>1 star</option>
-                  <option value={2}>2 stars</option>
-                  <option value={3}>3 stars</option>
-                  <option value={4}>4 stars</option>
-                  <option value={5}>5 stars</option>
+                  <option value={1}>1 - Not at all what I expected</option>
+                  <option value={2}>2 - Somewhat what I expected </option>
+                  <option value={3}>3 - Adequately what I expected </option>
+                  <option value={4}>4 - Mostly what I expected</option>
+                  <option value={5}>5 - Exactly what I expected</option>
                 </Form.Select>
-              </FloatingLabel>}
+              </FloatingLabel>
+              <br />
+              <p> How satisfied are you with the output image? </p>
+              <FloatingLabel label="Satisfaction Rating" className="dense mb-3">
+                <Form.Select
+                  name="ratingTwo"
+                  placeholder="ratingTwo"
+                >
+                  <option value={0}>Select rating</option>
+                  <option value={1}>1 - Not satisfied at all </option>
+                  <option value={2}>2 - Somewhat satisfied </option>
+                  <option value={3}>3 - Adequately satisfied </option>
+                  <option value={4}>4 - Mostly satisfied </option>
+                  <option value={5}>5 - Very satisfied</option>
+                </Form.Select>
+              </FloatingLabel>
+            </>
+              }
+
 
               <div className="d-flex justify-content-center align-items-center">
                 <Button

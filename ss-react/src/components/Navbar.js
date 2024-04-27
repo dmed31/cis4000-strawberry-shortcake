@@ -26,9 +26,21 @@ const Navbar = ({ loggedIn }) => {
                 Sign up
               </Link>
             </li> */}
+            {admin === "0" && <NavDropdown title="Upload Image" id="basic-nav-dropdown">
+              <NavDropdown.Item>
+                <Link className="dropdown-item" to={'/camera'}>
+                  Camera
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link className="dropdown-item" to={'/externalImageLink'}>
+                  External Link
+                </Link>
+              </NavDropdown.Item>
+            </NavDropdown>}
             <li className="nav-item">
-              <Link className="nav-link" to={'/sign-in'}>
-                Log Out
+              <Link className="nav-link" to={'/gallery'}>
+                Gallery
               </Link>
             </li>
             {admin === "0" && <li className="nav-item">
@@ -42,27 +54,15 @@ const Navbar = ({ loggedIn }) => {
               </Link>
             </li>}
             <li className="nav-item">
-              <Link className="nav-link" to={'/gallery'}>
-                Gallery
+              <Link className="nav-link" to={'/sign-in'}>
+                Log Out
               </Link>
             </li>
-            {admin === "0" && <NavDropdown title="Upload Image" id="basic-nav-dropdown">
-              <NavDropdown.Item>
-                <Link className="dropdown-item" to={'/camera'}>
-                  Camera
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link className="dropdown-item" to={'/externalImageLink'}>
-                  External Link
-                </Link>
-              </NavDropdown.Item>
-            </NavDropdown>}
-            {admin === "0" && <li className="nav-item">
+            {/* {admin === "0" && <li className="nav-item">
               <Link className="nav-link" to={'/applyFilter'}>
                 Apply Filter
               </Link>
-            </li>}
+            </li>} */}
           </ul>}
         </div>
       </div>

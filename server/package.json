@@ -6,6 +6,8 @@
     "start": "nodemon server.js"
   },
   "dependencies": {
+    "@aws-sdk/client-sagemaker": "^3.541.0",
+    "@aws-sdk/client-sagemaker-runtime": "^3.540.0",
     "aws-sdk": "^2.1542.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",

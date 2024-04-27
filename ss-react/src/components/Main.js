@@ -25,13 +25,27 @@ const Main = () => {
         <div className="image-container mb-3">
           <img src={logo} alt="logo.png" width={150} height={150} style={{ marginBottom: '50px'}}/>
         </div>
-        <div className="text-center" style={{ marginBottom: '50px'}}>Welcome to the filter lab! Through this application, you can:
+        <div className="text-center" style={{ marginBottom: '50px'}}>
+          Welcome to the filter lab{admin === "1" && " admin view"}! Through this application, you can:
         </div>
         <ol className="text-left mx-auto" style={{ maxWidth: "400px" }}>
-          <li className="mb-3">Take photos with your camera or upload an image via URL</li>
-          <li className="mb-3">Apply a filter</li>
-          <li className="mb-3">Leave comments on specific photos in the Gallery</li>
-          <li className="mb-3">Give general feedback about the filter</li>
+        { admin === "0" ? <>
+          <li className="mb-3">
+            <a href="/camera">Take photos</a> with your camera 
+            or <a href="/externalImageLink">upload an image</a> via URL.
+          </li>
+          <li className="mb-3">
+            View all photos, original or generated, in <a href="/gallery">the gallery</a>!
+          </li>
+          <li className="mb-3">Apply a filter in <a href="/gallery">the gallery</a>.</li>
+          <li className="mb-3">
+            Provide specific feedback on photos in the gallery 
+            and <a href="/feedback">general feedback</a> about the filters or website.
+          </li>
+        </> : <>
+          <li className="mb-3">View all <a href="/gallery">user-submitted images</a>.</li>
+          <li className="mb-3">View all <a href="/feedbackTable">user-submitted feedback</a>.</li>
+        </> }
         </ol>
       </div>
     </div>

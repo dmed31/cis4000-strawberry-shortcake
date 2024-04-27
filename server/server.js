@@ -22,7 +22,7 @@ app.post('/savePublicImage', jsonParser, routes.save_public_image); // Used
 app.post('/saveOriginalImage', jsonParser, routes.save_original_image); // Used
 app.post('/getAllUserImages', jsonParser, routes.get_all_user_images); // Used
 app.post('/getAllImages', jsonParser, routes.get_all_images); // Used
-app.post('/saveFilteredImage', routes.save_filtered_image);
+app.post('/saveFilteredImage', jsonParser, routes.save_filtered_image);
 app.post('/addBasicFeedback', jsonParser, routes.add_basic_feedback); // Used
 app.post('/addMultiFeedback', routes.add_multi_feedback);
 app.post('/getAllFeedback', jsonParser, routes.get_all_feedback); // Used
