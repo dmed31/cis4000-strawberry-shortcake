@@ -20,6 +20,7 @@ const Feedback = ({ imageId, imageUrl, originalImageId }) => {
     fetchBody['feedbackText'] = formData.get('feedbackText');
     fetchBody['ratingOne'] = formData.get('ratingOne');
     fetchBody['ratingTwo'] = formData.get('ratingTwo');
+
     if (imageId) {
       fetchBody['imageId'] = imageId;
     }
@@ -166,6 +167,7 @@ const Feedback = ({ imageId, imageUrl, originalImageId }) => {
               </FloatingLabel>
             </>
               }
+
 
               <div className="d-flex justify-content-center align-items-center">
                 <Button
