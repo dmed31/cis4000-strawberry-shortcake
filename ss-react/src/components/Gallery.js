@@ -99,7 +99,7 @@ const Gallery = () => {
           if (data['status'] !== 'success') {
             alert('An error occurred while retrieving the images. Please try again.');
           } else {
-            const modifiedUrlList = data['data'].map(u => ({src: u.newUrl, width: 400, height: 400, dbId: u.id, dbOid: u.originalImageId, oldUrl: u.oldUrl}))
+            const modifiedUrlList = data['data'].map(u => ({src: u.newUrl, width: 400, height: 400, dbId: u.id, dbOid: u.originalImageId, oldUrl: u.oldUrl, prompt: u.filterPrompt}))
             setUrls(modifiedUrlList);
           }
         })
